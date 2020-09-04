@@ -13087,6 +13087,170 @@ a.text-muted:hover {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 }@charset "UTF-8";
 
+.Mirage {
+  color: #1F2D3D;
+}
+
+.SanMarino {
+  color: #3F51B5;
+}
+
+.LightSalmon {
+  color: #FFA07A;
+}
+
+.DarkSalmon {
+  color: #E9967A;
+}
+
+.LightCoral {
+  color: #F08080;
+}
+
+.IndianRed {
+  color: #CD5C5C;
+}
+
+.Crimson {
+  color: #DC143C;
+}
+
+.reRed {
+  color: #FF0000;
+}
+
+.FireBrick {
+  color: #B22222;
+}
+
+.DarkRed {
+  color: #8B0000;
+}
+
+.black {
+  color: #000000;
+}
+
+.LightSlateGrey {
+  color: #778899;
+}
+
+.Salmon {
+  color: #FA8072;
+}
+
+.Coral {
+  color: #FF7F50;
+}
+
+.SteelBlue {
+  color: #4682B4;
+}
+
+.Wheat {
+  color: #F5DEB3;
+}
+
+.LightGray {
+  color: #D3D3D3;
+}
+
+.MediumAquaMarine {
+  color: #66CDAA;
+}
+
+.DarkSeaGreen {
+  color: #8FBC8F;
+}
+
+.LightSeaGreen {
+  color: #20B2AA;
+}
+
+.DarkCyan {
+  color: #008B8B;
+}
+
+.Teal {
+  color: #008080;
+}
+
+.MidnightBlue {
+  color: #191970;
+}
+
+.PaleVioletRed {
+  color: #DB7093;
+}
+
+.Gainsboro {
+  color: #DCDCDC;
+}
+
+.Silver {
+  color: #C0C0C0;
+}
+
+.DarkGray {
+  color: #A9A9A9;
+}
+
+.DimGray {
+  color: #696969;
+}
+
+.Gray {
+  color: #808080;
+}
+
+.SlateGray {
+  color: #708090;
+}
+
+.DarkSlateGray {
+  color: #2F4F4F;
+}
+
+.blue {
+  color: #3490dc;
+}
+
+.indigo {
+  color: #6574cd;
+}
+
+.purple {
+  color: #9561e2;
+}
+
+.pink {
+  color: #f66d9b;
+}
+
+.red {
+  color: #e3342f;
+}
+
+.orange {
+  color: #f6993f;
+}
+
+.yellow {
+  color: #ffed4a;
+}
+
+.green {
+  color: #38c172;
+}
+
+.teal {
+  color: #4dc0b5;
+}
+
+.cyan {
+  color: #6cb2eb;
+}
+
 /*!
  * Bootstrap v4.5.2 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
@@ -19169,13 +19333,13 @@ a.badge-dark.focus {
   font-size: 1.35rem;
   font-weight: 700;
   line-height: 1;
-  color: #000;
+  color: #000000;
   text-shadow: 0 1px 0 #fff;
   opacity: 0.5;
 }
 
 .close:hover {
-  color: #000;
+  color: #000000;
   text-decoration: none;
 }
 
@@ -19354,7 +19518,7 @@ a.close.disabled {
   z-index: 1040;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background-color: #000000;
 }
 
 .modal-backdrop.fade {
@@ -19513,7 +19677,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=top] .arrow::before {
   top: 0;
   border-width: 0.4rem 0.4rem 0;
-  border-top-color: #000;
+  border-top-color: #000000;
 }
 
 .bs-tooltip-right,
@@ -19532,7 +19696,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=right] .arrow::before {
   right: 0;
   border-width: 0.4rem 0.4rem 0.4rem 0;
-  border-right-color: #000;
+  border-right-color: #000000;
 }
 
 .bs-tooltip-bottom,
@@ -19549,7 +19713,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=bottom] .arrow::before {
   bottom: 0;
   border-width: 0 0.4rem 0.4rem;
-  border-bottom-color: #000;
+  border-bottom-color: #000000;
 }
 
 .bs-tooltip-left,
@@ -19568,7 +19732,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=left] .arrow::before {
   left: 0;
   border-width: 0.4rem 0 0.4rem 0.4rem;
-  border-left-color: #000;
+  border-left-color: #000000;
 }
 
 .tooltip-inner {
@@ -19576,7 +19740,7 @@ a.close.disabled {
   padding: 0.25rem 0.5rem;
   color: #fff;
   text-align: center;
-  background-color: #000;
+  background-color: #000000;
   border-radius: 0.25rem;
 }
 
@@ -23957,7 +24121,7 @@ a.text-dark:focus {
   }
 
   .badge {
-    border: 1px solid #000;
+    border: 1px solid #000000;
   }
 
   .table {
@@ -30070,5 +30234,16 @@ readers do not read off random characters that represent icons */
 .fab {
   font-family: "Font Awesome 5 Brands";
   font-weight: 400;
+}
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.router-link-exact-active {
+  background-color: #1F2D3D;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 

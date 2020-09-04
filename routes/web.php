@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+// Route::get('{path}','HomeController@index')->where( 'path','([A-z\d-\/_.]+)?' ); laravel v6
+Route::get('/{any}', 'HomeController@index')->where('any', '.*'); //laravel v7
