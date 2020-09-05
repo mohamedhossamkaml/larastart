@@ -8,6 +8,49 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+// cretueusebiu/vform (Package)
+import { Form, HasError, AlertError } from 'vform';
+window.Form = Form;
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
+
+// Moment (Package)
+import moment from 'moment';
+
+//  hilongjw / vue-progressbar (Package)
+import VueProgressBar from 'vue-progressbar';
+const options = {
+    color: '#bffaf3',
+    failedColor: '#874b4b',
+    thickness: '3px',
+    transition: {
+        speed: '0.02s',
+        opacity: '0.6s',
+        termination: 400
+    },
+    autoRevert: true,
+    location: 'top',
+    inverse: false
+};
+Vue.use(VueProgressBar, options);
+
+
+// SweetAlert2 (Package)
+import Swal from 'sweetalert2';
+window.Swal = Swal;
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    onOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+});
+window.Toast = Toast;
+
 // Vue Router
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
@@ -18,6 +61,20 @@ const router = new VueRouter({
     mode: 'history',
     routes
 });
+
+// relaode
+
+window.Fire = new Vue();
+
+
+// Vue Filter (Validation)
+Vue.filter('upText' ,function(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1)
+}); // Text Upper Cases
+
+Vue.filter('myDate', function(created) {
+    return moment(created).format('MMMM Do YYYY, h:mm:ss a');
+}); // Date Time Moment
 
 /**
  * The following block of code may be used to automatically register your
