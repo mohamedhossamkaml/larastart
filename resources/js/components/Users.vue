@@ -13,7 +13,7 @@
                                     <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                                 </div>
                             </div> -->
-                        <button class="btn btn-success " data-toggle="modal" data-target="#addNew">
+                        <button class="btn btn-success " @click="newModal">
                             <i class="fa fa-user-plus fa-fw"></i>
                             Add New
                         </button>
@@ -40,10 +40,10 @@
                                 <td><span class="tag tag-success">{{ user.type | upText }}</span></td>
                                 <td>{{ user.created_at | myDate }}</td>
                                 <td>
-                                    <a href="#" class=" col-5 ">
+                                    <a href="#" class=" col-5 " @click="editModal(user)">
                                         <i class="fa fa-edit Teal"></i>
                                     </a>
-                                    <a href="#" class=" col-5 ">
+                                    <a href="#" @click="deleteUser(user.id)" class=" col-5 ">
                                         <i class="fa fa-trash red"></i>
                                     </a>
                                 </td>
@@ -65,12 +65,14 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addNew"> Create User </h5>
+                    <h5 v-show="+editmode" class="modal-title" id="addNew"> Update User </h5>
+                    <h5 v-show="!editmode" class="modal-title" id="addNew"> Create User </h5>
+                    <h5 v-show="editmode==null" class="modal-title" id="addNew"> Error Function </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="createUser" class="modal-body">
+                <form @submit.prevent="editmode ? updateUser() : createUser()" class="modal-body">
                     <div>
                         <div class="form-group">
                             <input v-model="form.name" type="text" id="name" name="name" placeholder="Name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
@@ -99,8 +101,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary"> create </button>
+                        <button type="button" class="btn btn-danger " data-dismiss="modal">Close</button>
+                        <button v-show="editmode" type="submit" class="btn btn-success"> Update </button>
+                        <button v-show="!editmode" type="submit" class="btn btn-primary"> create </button>
+                        <button v-show="editmode==null" type="button" class="btn btn-warning"> Error </button>
                     </div>
                 </form>
             </div>
@@ -114,8 +118,10 @@ export default {
     name: "Users",
     data() {
         return {
+            editmode: null,
             users: {},
             form: new Form({
+                id: '',
                 name: '',
                 email: '',
                 password: '',
@@ -126,7 +132,19 @@ export default {
         }
     },
     methods: {
-        createUser() {
+        newModal() {
+            this.editmode = false;
+            this.form.reset();
+            $('#addNew').modal('show');
+        },
+        editModal(user) {
+            this.editmode = true;
+            this.form.reset();
+            $('#addNew').modal('show');
+            this.form.fill(user);
+        },
+
+        createUser() { // Created User Function //
             this.$Progress.start();
             this.form.post('api/user')
                 .then(req => {
@@ -151,7 +169,78 @@ export default {
                 });
             this.$Progress.finish();
         },
-        loadUsers() {
+
+        updateUser(id) { // Updated User Function //
+            // console.log("Edit Function");
+            this.$Progress.start();
+            this.form.put('api/user/' + this.form.id)
+                .then(() => {
+                    // Success
+                    $('#addNew').modal('hide');
+                    Fire.$emit('AfterCreate');
+                    Swal.fire(
+                        'Updated!',
+                        'Information Has Been Updated. :)',
+                        'success'
+                    )
+                    this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+            this.$Progress.finish();
+        },
+
+        deleteUser(id) { // Delete User Function //
+            // Sweet Alert2 Model //
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                this.$Progress.start();
+                if (result.value) {
+                    // Send Reuest To the Server //
+                    this.form.delete('api/user/' + id).then(() => {
+                            swalWithBootstrapButtons.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                            Fire.$emit('AfterCreate');
+                            this.$Progress.finish();
+                        })
+                        .catch(() => {
+                            swal("Failed", "There was Something Wronge", "Warning");
+                            this.$Progress.fail();
+                        });
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your imaginary file is safe :)',
+                        'error'
+                    )
+                    this.$Progress.fail();
+                }
+            }); // End Sweet Alert2 Model //
+        },
+
+        loadUsers() { // Reload User When Make Refresh The Page And When Added New User //
             this.$Progress.start();
             axios.get("api/user")
                 .then(
@@ -162,10 +251,6 @@ export default {
                 .catch(() => {
 
                 });
-            Toast.fire({
-                icon: 'success',
-                title: 'Walcome To User Controler'
-            });
             this.$Progress.finish();
         },
     },

@@ -23,8 +23,14 @@ $fa-font-path: "../webfonts";
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) ;
 }
 
+// Router Link Active
 .router-link-exact-active{
     background-color:$Mirage;
     color: #fff !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) ;
+}
+
+// Sweet Alert 2 Model delete Btn
+.btn-danger{
+    margin-right: 20px;
 }

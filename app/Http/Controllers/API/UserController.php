@@ -65,7 +65,31 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        // $user = User::findOrfail($id);
+
+        $data = $this->validate(request(),
+        [
+            'name'      =>  'required|string|max:191',
+            'email'     =>  'required|string|email|max:191|unique:users,email,'.$id,
+            'password'  =>  'sometimes|nullable|string|max:191|min:6',
+            'type'      =>  'required',
+            'bio'       =>  'sometimes|nullable',
+        ],
+    );
+
+    if( request()->has('password')){
+
+        $data['password']= bcrypt(request('password'));
+    }
+
+
+    User::where('id',$id)->update($data);
+
+    return response([
+        'status'=>true,
+        'message'=>'Updated User'
+    ], 200);
     }
 
     /**
@@ -76,6 +100,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrfail($id);
+
+        $user->delete();
+
+        // Delete The User 
+
+        return ['message' => 'Delete User Success'];
     }
 }
