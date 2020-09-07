@@ -9,6 +9,16 @@ use App\User;
 class UserController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -104,7 +114,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        // Delete The User 
+        // Delete The User
 
         return ['message' => 'Delete User Success'];
     }

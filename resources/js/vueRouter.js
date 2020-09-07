@@ -1,18 +1,24 @@
-import Dashboard from './components/Dashboard'
 import Home from './components/Home'
+import Dashboard from './components/Dashboard'
+import Developer from './components/Developer'
 import Profile from './components/Profile'
 import Users from './components/Users'
 
 export default [
+    {
+        path:'/home',
+        component:Home,
+        name: 'home',
+    },
     {
         path: '/dashboard',
         component:Dashboard,
         name: 'dashboard',
     },
     {
-        path:'/',
-        component:Home,
-        name: 'home',
+        path: '/developer',
+        component:Developer,
+        name: 'developer',
     },
     {
         path:'/profile',
