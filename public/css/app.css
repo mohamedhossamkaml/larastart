@@ -13259,6 +13259,14 @@ a.text-muted:hover {
   color: #494E53;
 }
 
+.SpicyMix {
+  color: #855C49;
+}
+
+.BlackBean {
+  color: #081910;
+}
+
 .Mirage-bag {
   background-color: #1F2D3D;
 }
@@ -13429,6 +13437,14 @@ a.text-muted:hover {
 
 .Abbey-bag {
   background-color: #494E53;
+}
+
+.SpicyMix-bag {
+  background-color: #855C49;
+}
+
+.BlackBean-bag {
+  background-color: #081910;
 }
 
 /*!
@@ -30429,5 +30445,29 @@ readers do not read off random characters that represent icons */
 
 .btn-danger {
   margin-right: 20px;
+}
+
+.worpper li a {
+  display: block;
+  margin: 0 7.5px;
+  width: 40px;
+  text-align: center;
+  color: #494E53 !important;
+  border-radius: 50%;
+  background-color: #808080;
+}
+
+.worpper li a:hover {
+  color: #855C49 !important;
+  background-color: #213157a2;
+}
+
+.worpper .router-link-exact-active {
+  background-color: unset;
+}
+
+.worpper .router-link-exact-active a {
+  color: #855C49 !important;
+  background-color: #213157a2;
 }
 

@@ -63,9 +63,16 @@ const router = new VueRouter({
 });
 
 // relaode
-
 window.Fire = new Vue();
 
+// vue2Dropzone (Package)
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+window.Vue = require('vue');
+
+// Vue2Editor (Package)
+import Vue2Editor from "vue2-editor";
+Vue.use(Vue2Editor);
 
 // Vue Filter (Validation)
 Vue.filter('upText' ,function(text) {
@@ -116,4 +123,7 @@ Vue.component(
 const app = new Vue({
     el: '#app',
     router,
+    components: {
+        vueDropzone: vue2Dropzone
+    },
 });

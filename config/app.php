@@ -227,6 +227,12 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        ////////////////////////// My Pacedg //////////////////////////////////
+        // 'Form'  => Collective\Html\FormFacade::class,
+        // 'Html'  => Collective\Html\HtmlFacade::class,
+        'Up'    => App\Http\Controllers\Upload::class,
+        ////////////////////////// My Pacedg //////////////////////////////////
+
     ],
 
 ];

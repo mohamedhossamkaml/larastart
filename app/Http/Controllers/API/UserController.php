@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 
 class UserController extends Controller
@@ -26,6 +27,44 @@ class UserController extends Controller
     public function index()
     {
         return User::latest()->paginate(10);
+    }
+
+    // User Profile
+    public function profile()
+    {
+        return auth('api')->user();
+    }
+
+    // User Uplod Image
+    public function uplod_image()
+    {
+        
+        $id = auth('api')->user()->id;
+        $User = User::where('id',$id)->update([
+            'photo'=>up()->upload([
+                    'file'          =>'file',
+                    'path'          =>'User/image/'.$id,
+                    'upload_type'   =>'single',
+                    'delete_file'   =>'',
+            ])
+        ]);
+
+        return response([
+            'status'=>true,
+            $id
+        ], 200);
+    }
+
+    public function delete_min_image($id)
+    {
+        $user = User::find($id);
+
+        Storage::delete($user->photo);
+
+        $user->photo = null;
+
+        $user->save();
+        return response(['status' => true], 200);
     }
 
     /**

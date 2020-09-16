@@ -25,7 +25,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="wrapper" id="app">
 
             <!-- Navbar -->
-            <nav class="main-header navbar navbar-expand navbar-white navbar-light Abbey-bag">
+            <nav class="main-header navbar navbar-expand navbar-white navbar-light Abbey-bag ">
                 <!-- Left navbar links -->
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -37,6 +37,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <li class="nav-item d-none d-sm-inline-block">
                         <a href="#" class="nav-link">Contact</a>
                     </li> --}}
+                    <ul class="navbar-nav ml-auto worpper">
+                        <router-link to="/home" tag="li" class="nav-item ">
+                            <a class="nav-link" role="button">
+                                <i class="fas fa fa-home "></i>
+                            </a>
+                        </router-link>
+                        <router-link to="/profile" tag="li" class="nav-item ">
+                            <a class="nav-link" role="button">
+                                <i class="fas fa fa-user"></i>
+                            </a>
+                        </router-link>
+                    </ul>
+
                 </ul>
 
                 <!-- SEARCH FORM -->
@@ -51,8 +64,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
                 </form>
 
-                {{-- <!-- Right navbar links -->
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-auto worpper">
+                    <router-link to="/hodfhdfme" tag="li" class="nav-item ">
+                        <a class="nav-link " role="button">
+                            <i class="fas fa fa-home "></i> 
+                        </a>
+                    </router-link>
+                    <router-link to="/paes" tag="li" class="nav-item">
+                        <a class="nav-link " role="button">
+                            <i class="fas fa-comments"></i>
+                        </a>
+                    </router-link>
+                    <router-link to="/sersh" tag="li" class="nav-item">
+                        <a class="nav-link " role="button">
+                            <i class="fas fa fa-bell"></i> 
+                        </a>
+                    </router-link>
+                </ul>
+
+
+                <!-- Right navbar links -->
+                {{-- <ul class="navbar-nav ml-auto">
                     <!-- Messages Dropdown Menu -->
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">

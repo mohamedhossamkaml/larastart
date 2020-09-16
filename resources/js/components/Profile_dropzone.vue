@@ -349,7 +349,6 @@
                                                 v-on:vdropzone-removed-file='removeThisFile'
                                                 >
                                         </vue-dropzone>
-                                        <!-- <img src="../../../storage/app/user/image/1/8laA8lw1ElUbzVX6aiD5p0iwBe1KfySVh0hJCgzW.jpeg" alt=""> -->
                                     </div>
                                 </div>
 
@@ -411,12 +410,21 @@ export default {
                 addRemoveLinks: true,
                 uploadMultiple: false ,
                 autoDiscover:false,
-                manuallyAdded: false,
                 acceptedFiles:'image/*',
                 headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') },
                 dictDefaultMessage: "CHOES IMAGE FILES",
                 photoChanged: false,
                 preventDuplicates: true,
+                init: function () {
+                    const vc = this //assigning this as a variable (I call it `vc` for vue-component)
+                    this.on("addedfile", function(file) {
+                        console.log("Added file ", file);
+                            vc.form = file
+                        console.log("Added file ", file);
+
+                    });
+                    // this.vdropzone-duplicate-file(file)
+                },
 
             },
         }
@@ -435,34 +443,6 @@ export default {
                     this.$Progress.fail();
                 });
         },
-        manuallyAddFiles: function (files) {
-            let self = this
-
-            for (var i = 0; i < files.length; i++) {
-                let reader = new FileReader()
-                let file = files[i]
-
-                reader.readAsDataURL(file)
-                reader.onload = function (evt) {
-                self.$refs.dropzone.manuallyAddFile({
-                    name: file.name,
-                    size: file.size,
-                    accepted: true,
-                    type: file.type,
-                    kind: file.type,
-                    upload: {
-                    filename: file.name
-                    },
-                    dataUrl: this.result
-                }, this.result, null, null, {
-                    dontSubstractMaxFiles: false,
-                    addToFiles: true
-                })
-                self.addNewSet(files)
-                }
-            }
-        },
-
         removeThisFile (file, error, xhr) {
             const data = {
             filename:  this.form.name
@@ -481,39 +461,86 @@ export default {
                 console.log(error)
             });
         },
-        // vfileAdded(file) {
-        //         console.log(file.name);
-        //         console.log(file);
-        //         // console.log("data url: " + this.form.poto);
-        // },
-        // vsendingFile(file, xhr, formData) {
-
-        //     console.log('send')
-        //     formData.append('data', this.base64)
-        // },
-
-        // vDropzoneCallback()
-        // {
-        //     const data = {
-        //     filename:  this.form.name
-        //     }
-            
-        //     var mock = {id: this.form.id, name: this.form.name, size: this.form.photo.size};
-        //     var url  = "storage/"+this.form.photo
-        //     this.$refs.myDropzone.manuallyAddFile(mock, url);
-        // },
-        // init: function() {
-        //     var mock = {id: "", name: "", size: ""};
-        //     var url  = "storage/"
-        //     this.$refs.myDropzone.manuallyAddFile(mock, url);
-        //     return this.dropzone.init();
-        // },
+    manuallyAddFile: function(file, fileUrl) {
+      file.manuallyAdded = true;
+      this.dropzone.emit("addedfile", file);
+      let containsImageFileType = false;
+      if (
+        fileUrl.indexOf(".svg") > -1 ||
+        fileUrl.indexOf(".png") > -1 ||
+        fileUrl.indexOf(".jpg") > -1 ||
+        fileUrl.indexOf(".jpeg") > -1 ||
+        fileUrl.indexOf(".gif") > -1 ||
+        fileUrl.indexOf(".webp") > -1
+      )
+        containsImageFileType = true;
+      if (
+        this.dropzone.options.createImageThumbnails &&
+        containsImageFileType &&
+        file.size <= this.dropzone.options.maxThumbnailFilesize * 1024 * 1024
+      ) {
+        fileUrl && this.dropzone.emit("thumbnail", file, fileUrl);
+        var thumbnails = file.previewElement.querySelectorAll(
+          "[data-dz-thumbnail]"
+        );
+        for (var i = 0; i < thumbnails.length; i++) {
+          thumbnails[i].style.width =
+            this.dropzoneSettings.thumbnailWidth + "px";
+          thumbnails[i].style.height =
+            this.dropzoneSettings.thumbnailHeight + "px";
+          thumbnails[i].style["object-fit"] = "contain";
+        }
+      }
+      this.dropzone.emit("complete", file);
+      if (this.dropzone.options.maxFiles) this.dropzone.options.maxFiles--;
+      this.dropzone.files.push(file);
+      this.$emit("vdropzone-file-added-manually", file);
     },
-    mounted()
+    },
+    mounted() 
     {
-
+        if (this.$isServer && this.hasBeenMounted) {
+        return;
+        }
+        this.hasBeenMounted = true;
+        this.dropzone = new Dropzone(
+        this.$refs.dropzoneElement,
+        this.dropzoneSettings
+        );
+        let vm = this;
+        this.dropzone.on("thumbnail", function(file, dataUrl) 
+        {
+            vm.$emit("vdropzone-thumbnail", file, dataUrl);
+        });
+        this.dropzone.on("addedfile", function(file) 
+        {
+            var isDuplicate = false;
+            if (vm.duplicateCheck) 
+            {
+                if (this.files.length) 
+                {
+                    var _i, _len;
+                    for (
+                        _i = 0, _len = this.files.length;
+                        _i < _len - 1;
+                        _i++ // -1 to exclude current file
+                    )  {
+                        if (
+                        this.files[_i].name === file.name &&
+                        this.files[_i].size === file.size &&
+                        this.files[_i].lastModifiedDate.toString() ===
+                            file.lastModifiedDate.toString()
+                        ) 
+                        {
+                        this.removeFile(file);
+                        isDuplicate = true;
+                        vm.$emit("vdropzone-duplicate-file", file);
+                        }
+                    }
+                }
+            }
+        }
     },
-
 
     created() {
         this.$Progress.start();
@@ -522,12 +549,8 @@ export default {
                 this.loadData();
             });
         this.$Progress.finish();
-
     },
 }
-
-
-
 
 </script>
 
