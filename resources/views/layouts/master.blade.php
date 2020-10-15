@@ -181,23 +181,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- Main Sidebar Container -->
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
-                <a href="index3.html" class="brand-link">
-                <img src="./img/content.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                    style="opacity: .8">
-                <span class="brand-text font-weight-light">Lara Start</span>
-                </a>
+                
+                <router-link to="/home" class="brand-link">
+                    <img src="./img/content.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                        style="opacity: .8">
+                    <span class="brand-text font-weight-light">Lara Start</span>
+                </router-link>
+                
 
                 <!-- Sidebar -->
                 <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                    <img src="./img/person (1).png" class="img-circle elevation-2" alt="User Image">
+                    <img src="{{ "storage/User/profile/".Auth::user()->photo }}" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">
-                            {{ Auth::user()->name }}
-                        </a>
+                        <router-link to="/profile" class="d-block">
+                            <h5><strong class="font-weight-bolder mr-auto text-capitalize">{{ Auth::user()->name }}</strong></h5>
+                        </router-link>
+                        <p class="text-muted text-capitalize Mirage-bag Gainsboro text-center rounded-pill ">
+                            {{ Auth::user()->type }}
+                        </p>
                     </div>
                 </div>
 
@@ -207,47 +212,61 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
 
-                        <!-- Start Dashboard -->
+                        @canany(['isAdmin','isAuthor'])
+                            <!-- Start Dashboard -->
+                            <li class="nav-item">
+                                <router-link to="/dashboard" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt indigo"></i>
+                                    <p>
+                                        Dashboard
+                                        {{-- <span class="right badge badge-danger">New</span> --}}
+                                    </p>
+                                </router-link>
+                            </li><!-- End Dashboard -->
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon  fas fa-cog teal"></i>
+                                    <p>
+                                        Management
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <router-link to="/users" class="nav-link ">
+                                        <i class="fas fa-users nav-icon"></i>
+                                        <p>Users</p>
+                                        </router-link>
+                                    </li>
+                                </ul>
+                            </li>
+                            @can('isAdmin')
+                                <!-- Start Developer -->
+                                <li class="nav-item">
+                                    <router-link to="/developer" class="nav-link">
+                                        <i class="nav-icon fas fa-cogs"></i>
+                                        <p>
+                                            Developer
+                                        </p>
+                                    </router-link>
+                                </li>
+                                <!-- End Developer -->
+                            @endcan
+                        @endcanany
+                        <!-- Start Home -->
                         <li class="nav-item">
-                            <router-link to="/dashboard" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt indigo"></i>
+                            <router-link to="/home" class="nav-link">
+                                <i class="nav-icon fas fa-home blue"></i>
                                 <p>
-                                    Dashboard
+                                    Home
                                     {{-- <span class="right badge badge-danger">New</span> --}}
                                 </p>
                             </router-link>
-                        </li><!-- End Dashboard -->
-
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon  fas fa-cog teal"></i>
-                                <p>
-                                    Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <router-link to="/users" class="nav-link ">
-                                    <i class="fas fa-users nav-icon"></i>
-                                    <p>Users</p>
-                                    </router-link>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- Start Developer -->
-                        <li class="nav-item">
-                            <router-link to="/developer" class="nav-link">
-                                <i class="nav-icon fas fa-cogs"></i>
-                                <p>
-                                    Developer
-                                </p>
-                            </router-link>
-                        </li><!-- End Developer -->
+                        </li><!-- End Home -->
                         <!-- Start Profile -->
                         <li class="nav-item">
                             <router-link to="/profile" class="nav-link">
-                                <i class="nav-icon fas fa-user blue"></i>
+                                <i class="nav-icon fas fa-user LightCoral"></i>
                                 <p>
                                     Profile
                                     {{-- <span class="right badge badge-danger">New</span> --}}
@@ -333,6 +352,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- REQUIRED SCRIPTS -->
 
+        @auth
+            <script>
+
+                window.user = @json(auth()->user())
+            </script>
+        @endauth
         <script src="/js/app.js"></script>
 
         <!-- jQuery -->

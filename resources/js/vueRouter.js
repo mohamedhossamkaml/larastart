@@ -3,6 +3,7 @@ import Dashboard from './components/Dashboard'
 import Developer from './components/Developer'
 import Profile from './components/Profile'
 import Users from './components/Users'
+import NotFound from './components/NotFound'
 
 export default [
     {
@@ -29,6 +30,11 @@ export default [
         path:'/users',
         component:Users,
         name: 'users',
+    },
+    {
+        path:'*',
+        component:NotFound,
+        name: 'notfound',
     },
 
 ]

@@ -64,7 +64,7 @@ class Upload extends Controller
             $size       = $file->getSize();
             $mime_type  = $file->getMimeType(); 
             $name       = $file->getClientOriginalName();
-            $hashname   =$file->hashName();
+            $hashname   = $file->hashName();
 
             $file->store($data['path']); 
             $add = File::create([        

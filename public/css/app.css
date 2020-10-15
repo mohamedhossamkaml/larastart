@@ -30438,7 +30438,6 @@ readers do not read off random characters that represent icons */
 }
 
 .router-link-exact-active {
-  background-color: #1F2D3D;
   color: #fff !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
@@ -30469,5 +30468,53 @@ readers do not read off random characters that represent icons */
 .worpper .router-link-exact-active a {
   color: #855C49 !important;
   background-color: #213157a2;
+}
+
+.slider-shadows {
+  background-color: #00000073;
+  z-index: 1;
+  position: absolute;
+  width: 170%;
+  height: 100%;
+}
+
+.mysliderpag .carousel-item {
+  height: 100vh;
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  background-size: cover;
+}
+
+.mysliderpag .carousel-caption {
+  bottom: 270px;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.mysliderpag .carousel-caption h2 {
+  margin-top: 25px;
+  font-size: 45px;
+  text-shadow: 2px 1px #2c2c2ca6;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.mysliderpag .carousel-caption p {
+  font-size: 15px;
+  width: 75%;
+  margin: auto;
+  text-shadow: 2px 1px #2c2c2ca6;
+  text-transform: capitalize;
+  line-height: 1.9;
+}
+
+.mysliders {
+  box-shadow: 0px 10px 20px 2px #213157a2;
+}
+
+.myhader .brand-link {
+  letter-spacing: 2px;
+  font-weight: bolder;
+  left: 2px;
 }
 

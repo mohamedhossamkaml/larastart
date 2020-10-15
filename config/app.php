@@ -172,6 +172,7 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
@@ -230,6 +231,7 @@ return [
         ////////////////////////// My Pacedg //////////////////////////////////
         // 'Form'  => Collective\Html\FormFacade::class,
         // 'Html'  => Collective\Html\HtmlFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
         'Up'    => App\Http\Controllers\Upload::class,
         ////////////////////////// My Pacedg //////////////////////////////////
 

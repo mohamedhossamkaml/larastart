@@ -14,6 +14,11 @@ window.Form = Form;
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
 
+// Gate To Type User
+import Gate from "./Gate.js";
+Vue.prototype.$gate = new Gate(window.user);
+
+
 // Moment (Package)
 import moment from 'moment';
 
@@ -112,6 +117,11 @@ Vue.component(
 Vue.component(
     'passport-personal-access-tokens',
     require('./components/passport/PersonalAccessTokens.vue').default
+);
+
+Vue.component(
+    'not-found',
+    require('./components/NotFound.vue').default
 );
 
 /**

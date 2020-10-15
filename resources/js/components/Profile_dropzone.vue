@@ -10,7 +10,7 @@
                     <h5 class="widget-user-desc text-right">Web Designer</h5>
                 </div>
                 <div class="widget-user-image">
-                    <img class="img-circle" src="" alt="User Avatar">
+                    <img class="img-circle"  :src="gitImageProfile()" alt="User Avatar">
                 </div>
                 <div class="card-footer">
                     <div class="row">
@@ -323,9 +323,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                                    <label for="inputPasswored" class="col-sm-2 col-form-label">Passwored</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                                        <input type="passwored" class="form-control" id="inputPasswored" placeholder="Passwored">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -341,13 +341,20 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="inputBio" class="col-sm-2 col-form-label">Bio</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" v-model="form.bio" class="form-control" id="inputBio" placeholder="Bio">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="inputSkills" class="col-sm-2 col-form-label">Profile Photo</label>
                                     <div class="col-sm-5">
                                         <vue-dropzone ref="myVueDropzone" id="dropzone" name="photo"
                                                 :options="dropzoneOptions"
                                                 :headers="{ 'X-CSRF-TOKEN': 'bbb' }"
                                                 v-on:vdropzone-removed-file='removeThisFile'
-                                                >
+                                                v-on:vdropzone-thumbnail="fileAdded"
+                                                v-on:vdropzone-mounted="vMount">
                                         </vue-dropzone>
                                     </div>
                                 </div>
@@ -388,10 +395,13 @@ vue2Dropzone.autoDiscover = false;
 export default {
     // components: {  VueEditor },
     components: {
-    vueDropzone: vue2Dropzone
+        vueDropzone: vue2Dropzone,
     },
     data() {
         return {
+            events: [
+                // vdropzone-thumbnail(file, dataUrl)
+            ],
             user:{},
             form: new Form({
                 id: '',
@@ -400,44 +410,55 @@ export default {
                 password: '',
                 type: '',
                 bio: '',
-                photo: '',
+                photo: null,
             }),
             dropzoneOptions: {
                 url: '/api/user/photo',
                 maxFiles:1,
                 maxFilesize:3, //mb
                 thumbnailWidth: 200,
+                addToFiles: true,
                 addRemoveLinks: true,
                 uploadMultiple: false ,
-                autoDiscover:false,
+                autoDiscover:true,
+                manuallyAdded: false,
                 acceptedFiles:'image/*',
                 headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') },
                 dictDefaultMessage: "CHOES IMAGE FILES",
-                photoChanged: false,
+                photoChanged: true,
+                duplicateCheck:true,
                 preventDuplicates: true,
-                init: function () {
-                    const vc = this //assigning this as a variable (I call it `vc` for vue-component)
-                    this.on("addedfile", function(file) {
-                        console.log("Added file ", file);
-                            vc.form = file
-                        console.log("Added file ", file);
-
-                    });
-                    // this.vdropzone-duplicate-file(file)
-                },
-
             },
         }
 
     },
     methods: {
+        gitImageProfile(){
+            return "storage/" + this.form.photo
+        },
+        fileAdded(file,durl) {
+            var file = { size: file.size, name: file.name, type: file.type };
+            // var url = "storage/" + this.form.photo;
+            console.log("storage/" + this.form.photo);
+            console.log(file);
+            console.log(durl);
+            // this.$refs.myVueDropzone.manuallyAddFile(file, url);
+        },
+        vMount() {
+            this.$nextTick(function () {
+                var file = { size: 123, name: "Icon", type: "image/png" };
+                var url = "storage/User/1/PB6FeeXDhj5Pwn0qYzxNCbatoPHbyUI25vaXF4QB.jpeg" ;
+                this.$refs.myVueDropzone.manuallyAddFile(file, url);
+                console.log("storage/" + this.gitImageProfile());
+            })
+        },
         loadData(){
             axios.get("api/profile")
                 .then(({
                     data
                 }) => (
                     this.form.fill(data),
-                    this.user = this.form
+                    this.user = this.form.photo
                 ))
                 .catch(() => {
                     this.$Progress.fail();
@@ -455,92 +476,21 @@ export default {
             })
             .then(response=>{
                 if(response.status == 200){
+                    Fire.$emit('AfterCreate');
                 }
             })
             .catch(error=>{
                 console.log(error)
             });
         },
-    manuallyAddFile: function(file, fileUrl) {
-      file.manuallyAdded = true;
-      this.dropzone.emit("addedfile", file);
-      let containsImageFileType = false;
-      if (
-        fileUrl.indexOf(".svg") > -1 ||
-        fileUrl.indexOf(".png") > -1 ||
-        fileUrl.indexOf(".jpg") > -1 ||
-        fileUrl.indexOf(".jpeg") > -1 ||
-        fileUrl.indexOf(".gif") > -1 ||
-        fileUrl.indexOf(".webp") > -1
-      )
-        containsImageFileType = true;
-      if (
-        this.dropzone.options.createImageThumbnails &&
-        containsImageFileType &&
-        file.size <= this.dropzone.options.maxThumbnailFilesize * 1024 * 1024
-      ) {
-        fileUrl && this.dropzone.emit("thumbnail", file, fileUrl);
-        var thumbnails = file.previewElement.querySelectorAll(
-          "[data-dz-thumbnail]"
-        );
-        for (var i = 0; i < thumbnails.length; i++) {
-          thumbnails[i].style.width =
-            this.dropzoneSettings.thumbnailWidth + "px";
-          thumbnails[i].style.height =
-            this.dropzoneSettings.thumbnailHeight + "px";
-          thumbnails[i].style["object-fit"] = "contain";
-        }
-      }
-      this.dropzone.emit("complete", file);
-      if (this.dropzone.options.maxFiles) this.dropzone.options.maxFiles--;
-      this.dropzone.files.push(file);
-      this.$emit("vdropzone-file-added-manually", file);
+
+
     },
-    },
-    mounted() 
+    mounted()
     {
-        if (this.$isServer && this.hasBeenMounted) {
-        return;
-        }
-        this.hasBeenMounted = true;
-        this.dropzone = new Dropzone(
-        this.$refs.dropzoneElement,
-        this.dropzoneSettings
-        );
-        let vm = this;
-        this.dropzone.on("thumbnail", function(file, dataUrl) 
-        {
-            vm.$emit("vdropzone-thumbnail", file, dataUrl);
-        });
-        this.dropzone.on("addedfile", function(file) 
-        {
-            var isDuplicate = false;
-            if (vm.duplicateCheck) 
-            {
-                if (this.files.length) 
-                {
-                    var _i, _len;
-                    for (
-                        _i = 0, _len = this.files.length;
-                        _i < _len - 1;
-                        _i++ // -1 to exclude current file
-                    )  {
-                        if (
-                        this.files[_i].name === file.name &&
-                        this.files[_i].size === file.size &&
-                        this.files[_i].lastModifiedDate.toString() ===
-                            file.lastModifiedDate.toString()
-                        ) 
-                        {
-                        this.removeFile(file);
-                        isDuplicate = true;
-                        vm.$emit("vdropzone-duplicate-file", file);
-                        }
-                    }
-                }
-            }
-        }
+
     },
+
 
     created() {
         this.$Progress.start();
@@ -549,8 +499,10 @@ export default {
                 this.loadData();
             });
         this.$Progress.finish();
+
     },
 }
+
 
 </script>
 
@@ -563,4 +515,5 @@ export default {
 .widget-user .widget-user-image{
     top: 255px;
 }
+
 </style>

@@ -20,5 +20,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResources(['user' => 'API\UserController']);
 Route::get('profile', 'API\UserController@profile');
+Route::put('profile', 'API\UserController@updateProfileTow');
+// Route::put('profile', 'API\UserController@updateProfile');
+
+
+
 Route::post('user/photo', 'API\UserController@uplod_image');
 Route::post('delete/user/image/{pid}', 'API\UserController@delete_min_image');

@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-    <div class="row mt-5">
+    <div class="row mt-5" v-if="$gate.isAdminOrAuthor()">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -13,7 +13,7 @@
                                     <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                                 </div>
                             </div> -->
-                        <button class="btn btn-success " @click="newModal">
+                        <button class="btn btn-success " v-if="$gate.isAdmin()"  @click="newModal">
                             <i class="fa fa-user-plus fa-fw"></i>
                             Add New
                         </button>
@@ -29,7 +29,7 @@
                                 <th>Email</th>
                                 <th>Type</th>
                                 <th>Registered At / Date</th>
-                                <th>Modify</th>
+                                <th v-if="$gate.isAdmin()">Modify</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,7 +39,7 @@
                                 <td>{{ user.email }}</td>
                                 <td><span class="tag tag-success">{{ user.type | upText }}</span></td>
                                 <td>{{ user.created_at | myDate }}</td>
-                                <td>
+                                <td v-if="$gate.isAdmin()">
                                     <a href="#" class=" col-5 " @click="editModal(user)">
                                         <i class="fa fa-edit Teal"></i>
                                     </a>
@@ -55,6 +55,9 @@
             </div>
             <!-- /.card -->
         </div>
+    </div>
+    <div class="row " v-else>
+        <not-found/>
     </div>
     <!-- Button trigger modal
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
@@ -165,9 +168,15 @@ export default {
                     }
                 })
                 .catch(() => {
-
+                    $('#addNew').modal('hide');
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    })
+                    this.$Progress.fail();
                 });
-            this.$Progress.finish();
+            // this.$Progress.finish();
         },
 
         updateUser(id) { // Updated User Function //
@@ -186,9 +195,15 @@ export default {
                     this.$Progress.finish();
                 })
                 .catch(() => {
+                    $('#addNew').modal('hide');
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    })
                     this.$Progress.fail();
                 });
-            this.$Progress.finish();
+            // this.$Progress.finish();
         },
 
         deleteUser(id) { // Delete User Function //
@@ -200,7 +215,6 @@ export default {
                 },
                 buttonsStyling: false
             });
-
             swalWithBootstrapButtons.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -223,7 +237,11 @@ export default {
                             this.$Progress.finish();
                         })
                         .catch(() => {
-                            swal("Failed", "There was Something Wronge", "Warning");
+                            Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                            })
                             this.$Progress.fail();
                         });
                 } else if (
@@ -241,17 +259,20 @@ export default {
         },
 
         loadUsers() { // Reload User When Make Refresh The Page And When Added New User //
-            this.$Progress.start();
-            axios.get("api/user")
-                .then(
-                    ({
-                        data
-                    }) => (this.users = data.data)
-                )
-                .catch(() => {
-
-                });
-            this.$Progress.finish();
+            if(this.$gate.isAdminOrAuthor() ){
+                this.$Progress.start();
+                axios.get("api/user")
+                    .then(
+                        ({
+                            data
+                        }) => (this.users = data.data),
+                        this.$Progress.finish()
+                    )
+                    .catch(() => {
+                        this.$Progress.fail();
+                    });
+                // this.$Progress.finish();
+            }
         },
     },
     created() {
